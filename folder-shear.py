@@ -19,7 +19,6 @@ def get_size(start_path = '.'):
             total_size += getsize(filepath)
     return total_size
 
-
 found_dirs = []
 no_found_dir, total_size = 0, 0
 for dirpath, dirnames, filenames in os.walk(DIR, topdown=False):

@@ -9,9 +9,9 @@ parser.add_argument("-s", "--size", nargs="?", const=1, default=1, type=int,
 args = parser.parse_args()
 
 DIR = args.folder[0]
-MAX_DIR_SIZE_IN_KB = args.size
+MAX_SIZE = args.size
 
-def get_dir_size(start_path = '.'):
+def get_size(start_path = '.'):
     total_size = 0
     for dirpath, dirnames, filenames in os.walk(start_path):
         for filename in filenames:
@@ -21,19 +21,19 @@ def get_dir_size(start_path = '.'):
 
 
 found_dirs = []
-number_of_found_dirs, total_size = 0, 0
+no_found_dir, total_size = 0, 0
 for dirpath, dirnames, filenames in os.walk(DIR, topdown=False):
     for dirname in dirnames:
         current_dirpath = join(dirpath, dirname)
-        current_dirsize = get_dir_size(current_dirpath)
-        if current_dirsize < MAX_DIR_SIZE_IN_KB * 1024:
+        curr_dir_size = get_size(current_dirpath)
+        if curr_dir_size < MAX_SIZE * 1024:
             print(current_dirpath)
             found_dirs.append(current_dirpath)
-            number_of_found_dirs += 1
-            total_size += current_dirsize
+            no_found_dir += 1
+            total_size += curr_dir_size
 
 if found_dirs:
-    delete = raw_input("Do you want to delete the above directories [y/n]?")
+    delete = raw_input("Do you want to delete the above directories [y/n]? ")
 
     if delete != "y":
       exit()
@@ -42,5 +42,5 @@ if found_dirs:
             shutil.rmtree(dirpath, ignore_errors = False)
             print(dirpath, 'removed')
 
-        print(number_of_found_dirs, 'directories removed')
+        print(no_found_dir, 'directories removed')
         print(total_size/1024, 'kilobytes removed') 
